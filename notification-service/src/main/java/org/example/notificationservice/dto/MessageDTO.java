@@ -1,4 +1,6 @@
 package org.example.notificationservice.dto;
 
-public record MessageDTO() {
+import java.util.UUID;
+
+public record MessageDTO(String text, UUID userId) {
 }

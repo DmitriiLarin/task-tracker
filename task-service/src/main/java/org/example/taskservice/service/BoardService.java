@@ -3,10 +3,12 @@ package org.example.taskservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.taskservice.dto.BoardDTO;
+import org.example.taskservice.dto.Message;
 import org.example.taskservice.dto.response.BoardInfoResponse;
 import org.example.taskservice.entity.Board;
 import org.example.taskservice.entity.Task;
 import org.example.taskservice.repository.BoardRepository;
+import org.example.taskservice.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

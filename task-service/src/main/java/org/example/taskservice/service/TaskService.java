@@ -2,6 +2,7 @@ package org.example.taskservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.taskservice.dto.Message;
 import org.example.taskservice.dto.request.UpdateTaskPriorityRequest;
 import org.example.taskservice.entity.Task;
 import org.example.taskservice.repository.TaskRepository;
@@ -15,8 +16,10 @@ import java.util.UUID;
 @Slf4j
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public Task createTask(Task task) {
+//        kafkaProducerService.sendMessage(new Message("new task", task.getUserId()));
         return taskRepository.save(task);
     }
 

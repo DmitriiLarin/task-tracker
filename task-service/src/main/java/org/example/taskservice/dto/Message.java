@@ -1,4 +1,6 @@
 package org.example.taskservice.dto;
 
-public class Message {
+import java.util.UUID;
+
+public record Message(String text, UUID userId) {
 }

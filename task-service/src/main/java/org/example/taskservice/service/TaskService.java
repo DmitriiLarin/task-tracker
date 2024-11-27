@@ -19,7 +19,7 @@ public class TaskService {
     private final KafkaProducerService kafkaProducerService;
 
     public Task createTask(Task task) {
-//        kafkaProducerService.sendMessage(new Message("new task", task.getUserId()));
+        kafkaProducerService.sendMessage(new Message("new task", task.getUserId()));
         return taskRepository.save(task);
     }
 

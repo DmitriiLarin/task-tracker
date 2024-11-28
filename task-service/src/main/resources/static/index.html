@@ -24,6 +24,13 @@
       text-align: center;
       width: 300px;
     }
+    .modal .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
     #userList {
       list-style-type: none;
       padding: 0;
@@ -304,10 +311,11 @@
     <div id="userInfo" class="user-info">
       <p>Привет, <span id="userName"></span>!</p>
     </div>
-    <button onclick="openModal()">Создать доску</button>
     <button onclick="ownBoard()">Мои задачи</button>
+    <button onclick="openModal()">Создать доску</button>
     <button onclick="toggleBoardList()">Мои доски</button>
     <ul id="boardList" class="hidden"></ul>
+    <button onclick="viewNotifications()">Уведомления</button>
     <button onclick="logout()">Выйти</button>
   </div>
 
@@ -383,6 +391,13 @@
     <input type="datetime-local" id="editTaskDeadlineInput" />
     <button onclick="submitTaskEdit()">Сохранить</button>
     <button onclick="closeEditTaskModal()">Закрыть</button>
+  </div>
+</div>
+<div id="notificationModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="closeNotifications()">&times;</span>
+    <h3>Уведомления</h3>
+    <ul id="notificationList"></ul>
   </div>
 </div>
 <script>
@@ -1044,9 +1059,36 @@
     }
   }
 
-  // Вызываем функцию после загрузки страницы
-  document.addEventListener('DOMContentLoaded', fetchUserInfo);
+  async function viewNotifications() {
+    const notificationModal = document.getElementById("notificationModal");
+    const notificationList = document.getElementById("notificationList");
 
+    notificationModal.classList.remove("hidden");
+
+    try {
+      const response = await axiosInstance.get('http://localhost:8082/api/v1/notification');
+
+      const notifications = response.data;
+
+      notificationList.innerHTML = "";
+
+      notifications.forEach(notification => {
+        const li = document.createElement("li");
+        li.textContent = `${notification.text} (${new Date(notification.createdAt).toLocaleString()})`;
+        notificationList.appendChild(li);
+      });
+    } catch (error) {
+      console.error("Ошибка при загрузке уведомлений:", error);
+      notificationList.innerHTML = "<li>Не удалось загрузить уведомления</li>";
+    }
+  }
+
+  function closeNotifications() {
+    const notificationModal = document.getElementById("notificationModal");
+    notificationModal.classList.add("hidden");
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchUserInfo);
 
   document.addEventListener("DOMContentLoaded", function () {
     ownBoard();

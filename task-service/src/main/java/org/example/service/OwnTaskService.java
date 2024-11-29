@@ -2,10 +2,15 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.EventType;
+import org.example.dto.TaskNotificationDTO;
 import org.example.dto.request.UpdateTaskPriorityRequest;
 import org.example.entity.OwnTask;
 import org.example.repository.OwnTaskRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class OwnTaskService {
 
     private final OwnTaskRepository ownTaskRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public OwnTask updatePriority(UpdateTaskPriorityRequest updateTaskPriorityRequest) {
         OwnTask ownTask = ownTaskRepository.findById(updateTaskPriorityRequest.taskId()).orElseThrow();
@@ -25,10 +31,16 @@ public class OwnTaskService {
     }
 
     public OwnTask updateTask(OwnTask ownTask) {
+        kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_UPDATE, ownTask.getOwnBoard().getId(),
+                ownTask.getId(), ownTask.getTimer()));
         return ownTaskRepository.save(ownTask);
     }
 
     public OwnTask saveTask(OwnTask ownTask) {
+        kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_ADD, ownTask.getOwnBoard().getId(),
+                ownTask.getId(), ownTask.getTimer()));
         return ownTaskRepository.save(ownTask);
     }
 

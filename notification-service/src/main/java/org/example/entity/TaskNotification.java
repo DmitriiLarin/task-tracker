@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.dto.EventType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,6 +34,15 @@ public class TaskNotification {
 
     @Column(nullable = false)
     private UUID userId;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private int boardId;
+
+    @Column(nullable = false)
+    private int taskId;
 
     @Column(nullable = false)
     private LocalDateTime deadline;

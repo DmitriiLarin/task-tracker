@@ -34,4 +34,13 @@ public class TaskNotificationService {
 
         taskNotificationRepository.save(taskNotification);
     }
+
+    public void delete(TaskNotificationDTO taskNotificationDTO) {
+        TaskNotification taskNotification = taskNotificationRepository.
+                findByTaskIdAndBoardId(taskNotificationDTO.taskId(), taskNotificationDTO.boardId());
+
+
+
+        taskNotificationRepository.delete(taskNotification);
+    }
 }

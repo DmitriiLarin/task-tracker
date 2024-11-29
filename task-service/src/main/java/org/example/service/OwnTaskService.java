@@ -45,6 +45,13 @@ public class OwnTaskService {
     }
 
     public void deleteTaskById(int id) {
+
+        OwnTask ownTask =  ownTaskRepository.findOwnTaskById(id);
+
+        kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_DELETE, ownTask.getOwnBoard().getId(),
+                ownTask.getId(), ownTask.getTimer()));
+
         ownTaskRepository.deleteById(id);
     }
 }

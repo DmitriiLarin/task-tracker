@@ -33,6 +33,7 @@ public class NotificationConsumerService {
         switch (taskNotificationDTO.eventType()) {
             case TASK_ADD -> handleTaskNotificationAdd(taskNotificationDTO);
             case TASK_UPDATE -> handleTaskNotificationUpdate(taskNotificationDTO);
+            case TASK_DELETE -> handleTaskNotificationDelete(taskNotificationDTO);
             default -> log.error("Unknown event type {}", taskNotificationDTO.eventType());
         }
     }
@@ -61,5 +62,14 @@ public class NotificationConsumerService {
 
     private void handleTaskNotificationUpdate(TaskNotificationDTO taskNotificationDTO) {
         taskNotificationService.update(taskNotificationDTO);
+    }
+
+    private void handleTaskNotificationDelete(TaskNotificationDTO taskNotificationDTO) {
+        Message message = new Message();
+
+        message.setText("Задача " + taskNotificationDTO.taskName()
+                + " удалена, с доски" + taskNotificationDTO.boardName());
+
+        taskNotificationService.delete(taskNotificationDTO);
     }
 }

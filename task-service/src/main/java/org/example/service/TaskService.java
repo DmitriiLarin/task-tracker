@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dto.EventType;
 import org.example.dto.TaskNotificationDTO;
 import org.example.dto.request.UpdateTaskPriorityRequest;
+import org.example.entity.OwnTask;
 import org.example.entity.Task;
 import org.example.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,12 @@ public class TaskService {
     }
 
     public void deleteTaskById(int id) {
+        Task task = taskRepository.findTasksById(id);
+
+        kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
+                task.getBoard().getOwnerId(), EventType.TASK_DELETE, task.getBoard().getId(),
+                task.getId(), task.getTimer()));
+
         taskRepository.deleteById(id);
     }
 }

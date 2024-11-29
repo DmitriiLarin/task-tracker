@@ -2,6 +2,8 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.EventType;
+import org.example.dto.TaskNotificationDTO;
 import org.example.dto.request.UpdateTaskPriorityRequest;
 import org.example.entity.Task;
 import org.example.repository.TaskRepository;
@@ -15,8 +17,12 @@ import java.util.UUID;
 @Slf4j
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public Task createTask(Task task) {
+        kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
+                task.getBoard().getOwnerId(), EventType.TASK_ADD, task.getBoard().getId(),
+                task.getId(), task.getTimer()));
         return taskRepository.save(task);
     }
 
@@ -31,6 +37,9 @@ public class TaskService {
     }
 
     public Task updateTask(Task task) {
+        kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
+                task.getBoard().getOwnerId(), EventType.TASK_UPDATE, task.getBoard().getId(),
+                task.getId(), task.getTimer()));
         return taskRepository.save(task);
     }
 

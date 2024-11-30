@@ -26,7 +26,7 @@ public class TaskNotificationService {
 
     public void update(TaskNotificationDTO taskNotificationDTO) {
         TaskNotification taskNotification = taskNotificationRepository.
-                findByTaskIdAndBoardId(taskNotificationDTO.taskId(), taskNotificationDTO.boardId());
+                findByTaskIdAndTaskType(taskNotificationDTO.taskId(), taskNotificationDTO.taskType());
 
         taskNotification.setDeadline(taskNotificationDTO.deadline());
         taskNotification.setTaskName(taskNotificationDTO.taskName());
@@ -37,9 +37,7 @@ public class TaskNotificationService {
 
     public void delete(TaskNotificationDTO taskNotificationDTO) {
         TaskNotification taskNotification = taskNotificationRepository.
-                findByTaskIdAndBoardId(taskNotificationDTO.taskId(), taskNotificationDTO.boardId());
-
-
+                findByTaskIdAndTaskType(taskNotificationDTO.taskId(), taskNotificationDTO.taskType());
 
         taskNotificationRepository.delete(taskNotification);
     }

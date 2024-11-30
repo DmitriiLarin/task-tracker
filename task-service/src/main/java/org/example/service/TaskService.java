@@ -2,11 +2,11 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.EventType;
+import org.example.entity.EventType;
 import org.example.dto.TaskNotificationDTO;
 import org.example.dto.request.UpdateTaskPriorityRequest;
-import org.example.entity.OwnTask;
 import org.example.entity.Task;
+import org.example.entity.TaskType;
 import org.example.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class TaskService {
 
     public Task createTask(Task task) {
         kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
-                task.getBoard().getOwnerId(), EventType.TASK_ADD, task.getBoard().getId(),
+                task.getBoard().getOwnerId(), EventType.TASK_ADD, TaskType.TASK,
                 task.getId(), task.getTimer()));
         return taskRepository.save(task);
     }
@@ -39,7 +39,7 @@ public class TaskService {
 
     public Task updateTask(Task task) {
         kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
-                task.getBoard().getOwnerId(), EventType.TASK_UPDATE, task.getBoard().getId(),
+                task.getBoard().getOwnerId(), EventType.TASK_UPDATE, TaskType.TASK,
                 task.getId(), task.getTimer()));
         return taskRepository.save(task);
     }
@@ -52,7 +52,7 @@ public class TaskService {
         Task task = taskRepository.findTasksById(id);
 
         kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
-                task.getBoard().getOwnerId(), EventType.TASK_DELETE, task.getBoard().getId(),
+                task.getBoard().getOwnerId(), EventType.TASK_DELETE, TaskType.TASK,
                 task.getId(), task.getTimer()));
 
         taskRepository.deleteById(id);

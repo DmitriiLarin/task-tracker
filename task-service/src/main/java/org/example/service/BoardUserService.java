@@ -4,7 +4,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.BoardUserDTO;
-import org.example.dto.EventType;
+import org.example.entity.EventType;
 import org.example.dto.MessageDTO;
 import org.example.dto.response.BoardInfoResponse;
 import org.example.entity.BoardUser;

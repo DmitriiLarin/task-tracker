@@ -2,15 +2,13 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.EventType;
+import org.example.entity.EventType;
 import org.example.dto.TaskNotificationDTO;
 import org.example.dto.request.UpdateTaskPriorityRequest;
 import org.example.entity.OwnTask;
+import org.example.entity.TaskType;
 import org.example.repository.OwnTaskRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +30,14 @@ public class OwnTaskService {
 
     public OwnTask updateTask(OwnTask ownTask) {
         kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
-                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_UPDATE, ownTask.getOwnBoard().getId(),
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_UPDATE, TaskType.OWN_TASK,
                 ownTask.getId(), ownTask.getTimer()));
         return ownTaskRepository.save(ownTask);
     }
 
     public OwnTask saveTask(OwnTask ownTask) {
         kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
-                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_ADD, ownTask.getOwnBoard().getId(),
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_ADD, TaskType.OWN_TASK,
                 ownTask.getId(), ownTask.getTimer()));
         return ownTaskRepository.save(ownTask);
     }
@@ -49,7 +47,7 @@ public class OwnTaskService {
         OwnTask ownTask =  ownTaskRepository.findOwnTaskById(id);
 
         kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
-                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_DELETE, ownTask.getOwnBoard().getId(),
+                ownTask.getOwnBoard().getOwnerId(), EventType.TASK_DELETE, TaskType.OWN_TASK,
                 ownTask.getId(), ownTask.getTimer()));
 
         ownTaskRepository.deleteById(id);

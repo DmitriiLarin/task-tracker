@@ -51,7 +51,7 @@ public class NotificationConsumerService {
 
         taskNotification.setUserId(taskNotificationDTO.userId());
         taskNotification.setTaskId(taskNotificationDTO.taskId());
-        taskNotification.setBoardId(taskNotificationDTO.boardId());
+        taskNotification.setTaskType(taskNotificationDTO.taskType());
         taskNotification.setCreatedAt(LocalDateTime.now());
         taskNotification.setTaskName(taskNotificationDTO.taskName());
         taskNotification.setBoardName(taskNotificationDTO.boardName());

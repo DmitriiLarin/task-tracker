@@ -39,8 +39,8 @@ public class TaskNotification {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TaskType taskType;
 
     @Column(nullable = false)

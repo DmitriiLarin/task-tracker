@@ -17,7 +17,7 @@ public class TaskNotificationService {
     private final TaskNotificationRepository taskNotificationRepository;
 
     public List<TaskNotification> getAllTaskNotificationsInRange(LocalDateTime start, LocalDateTime end) {
-        return taskNotificationRepository.findAllByDeadlineBeforeAndDeadlineAfter(start, end);
+        return taskNotificationRepository.findAllByDeadlineBeforeAndDeadlineAfter(end, start);
     }
 
     public void save(TaskNotification taskNotification) {

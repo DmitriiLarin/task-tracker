@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.client.UserClient;
 import org.example.dto.response.MessageResponse;
 import org.example.service.MessageService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/notification")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin
 public class MessageController {
     private final UserClient userClient;
     private final MessageService messageService;

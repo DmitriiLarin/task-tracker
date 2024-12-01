@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.entity.Message;
 import org.example.entity.TaskNotification;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskSchedulerService {
 
     private final TaskNotificationService taskNotificationService;
@@ -19,6 +21,7 @@ public class TaskSchedulerService {
 
     @Scheduled(cron = "0 0 */4 * * *")
     public void scheduleFileCleanup() {
+        log.info("Cron work");
         LocalDateTime now = LocalDateTime.now();
         List<TaskNotification> list = taskNotificationService.getAllTaskNotificationsInRange(now, now.plusDays(2));
         for (TaskNotification taskNotification : list) {
@@ -26,8 +29,9 @@ public class TaskSchedulerService {
             Duration duration = Duration.between(now, taskNotification.getDeadline());
             long hours = duration.toHours();
             message.setText("До конца задачи - " + taskNotification.getTaskName()
-                    + " с доски -" + taskNotification.getBoardName() + "осталось: " +
+                    + " с доски -" + taskNotification.getBoardName() + " осталось: " +
                     hours + " часов");
+            message.setCreatedAt(LocalDateTime.now());
             message.setUserId(taskNotification.getUserId());
             messageService.save(message);
         }

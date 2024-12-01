@@ -28,18 +28,18 @@ public class OwnTaskService {
         return ownTaskRepository.findById(id).orElse(null);
     }
 
-    public OwnTask updateTask(OwnTask ownTask) {
+    public void updateTask(OwnTask ownTask) {
         kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
                 ownTask.getOwnBoard().getOwnerId(), EventType.TASK_UPDATE, TaskType.OWN_TASK,
                 ownTask.getId(), ownTask.getTimer()));
-        return ownTaskRepository.save(ownTask);
+        ownTaskRepository.save(ownTask);
     }
 
-    public OwnTask saveTask(OwnTask ownTask) {
+    public void saveTask(OwnTask ownTask) {
+        ownTaskRepository.save(ownTask);
         kafkaProducerService.sendTask(new TaskNotificationDTO(ownTask.getName(), "Моя таблица задач",
                 ownTask.getOwnBoard().getOwnerId(), EventType.TASK_ADD, TaskType.OWN_TASK,
                 ownTask.getId(), ownTask.getTimer()));
-        return ownTaskRepository.save(ownTask);
     }
 
     public void deleteTaskById(int id) {

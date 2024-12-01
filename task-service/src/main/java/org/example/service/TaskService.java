@@ -20,11 +20,11 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final KafkaProducerService kafkaProducerService;
 
-    public Task createTask(Task task) {
+    public void createTask(Task task) {
+        taskRepository.save(task);
         kafkaProducerService.sendTask(new TaskNotificationDTO(task.getName(), task.getBoard().getName(),
                 task.getBoard().getOwnerId(), EventType.TASK_ADD, TaskType.TASK,
                 task.getId(), task.getTimer()));
-        return taskRepository.save(task);
     }
 
     public Task updatePriority(UpdateTaskPriorityRequest updateTaskPriorityRequest) {

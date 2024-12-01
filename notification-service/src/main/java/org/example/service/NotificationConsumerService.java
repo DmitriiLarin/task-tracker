@@ -68,7 +68,12 @@ public class NotificationConsumerService {
         Message message = new Message();
 
         message.setText("Задача " + taskNotificationDTO.taskName()
-                + " удалена, с доски" + taskNotificationDTO.boardName());
+                + " удалена, с доски " + taskNotificationDTO.boardName());
+
+        message.setCreatedAt(LocalDateTime.now());
+        message.setUserId(taskNotificationDTO.userId());
+
+        messageService.save(message);
 
         taskNotificationService.delete(taskNotificationDTO);
     }
